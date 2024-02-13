@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjustable Input Box</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        input[type="text"] {
+            appearance: none;
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 3px #4CAF50;
+        }
+        button {
+            appearance: none;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #3E8E41;
+        }
+        #result-box {
+            background-color: #4CAF50;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+    <script>
+        let hue = 0;
+
+        function updateHue() {
+            hue = (hue + 1) % 360;
+            document.getElementById('result-box').style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+            window.requestAnimationFrame(updateHue);
+        }
+
+        function adjustInputWidth(inputElement) {
+            const inputValue = inputElement.value.replace(/,/g, '');
+            const inputWidth = Math.max(inputValue.length * 9.5 + 40, 200);
+            inputElement.style.width = `${inputWidth}px`;
+        }
+
+        function removeCommas() {
+            const inputElement = document.getElementById('input-box');
+            const inputValue = inputElement.value;
+            const resultValue = inputValue.replace(/,/g, '');
+            const resultElement = document.getElementById('result-box');
+            resultElement.innerText = `${resultValue}`;
+            if (!window.requestAnimationFrame) {
+                window.requestAnimationFrame = (callback) => setTimeout(callback, 1000 / 60);
+            }
+            window.requestAnimationFrame(updateHue);
+        }
+    </script>
+</head>
+<body>
+    <div id="input-container">
+        <input type="text" id="input-box" value="123,456,789,012" oninput="adjustInputWidth(this)">
+        <button onclick="removeCommas()">Remove Commas</button>
+        <p id="result-box"></p>
