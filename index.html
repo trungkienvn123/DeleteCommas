@@ -72,9 +72,9 @@
         function removeCommas() {
             const inputElement = document.getElementById('input-box');
             const inputValue = inputElement.value;
-            const resultValue = inputValue.replace(/,/g, '');
+            const resultValue = inputValue.replace(/,/g, ''); // Remove commas
             const resultElement = document.getElementById('result-box');
-            resultElement.innerText = `${resultValue}`;
+            resultElement.innerText = resultValue;
             if (!window.requestAnimationFrame) {
                 window.requestAnimationFrame = (callback) => setTimeout(callback, 1000 / 60);
             }
@@ -87,3 +87,6 @@
         <input type="text" id="input-box" value="123,456,789,012" oninput="adjustInputWidth(this)">
         <button onclick="removeCommas()">Remove Commas</button>
         <p id="result-box"></p>
+    </div>
+</body>
+</html>
