@@ -1,92 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adjustable Input Box</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #input-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
-        }
-        input[type="text"] {
-            appearance: none;
-            border: 2px solid #4CAF50;
-            border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 16px;
-            outline: none;
-            cursor: pointer;
-            transition: border 0.3s ease;
-        }
-        input[type="text"]:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 3px #4CAF50;
-        }
-        button {
-            appearance: none;
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #3E8E41;
-        }
-        #result-box {
-            background-color: #4CAF50;
-            border-radius: 4px;
-            color: black;
-            font-size: 16px;
-            padding: 10px 20px;
-            margin-top: 20px;
-            display: inline-block;
-            transition: background-color 0.3s ease;
-        }
-    </style>
-    <script>
-        let hue = 0;
+<title>Page Title</title>
+<style>
+.copy-button {
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    vertical-align: middle;
+    display: none; /* Hide the copy button initially */
+}
 
-        function updateHue() {
-            hue = (hue + 1) % 360;
-            document.getElementById('result-box').style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
-            window.requestAnimationFrame(updateHue);
-        }
+body {
+    font-family: Arial, sans-serif;
+}
 
-        function adjustInputWidth(inputElement) {
-            const inputValue = inputElement.value.replace(/,/g, '');
-            const inputWidth = Math.max(inputValue.length * 9.5 + 40, 200);
-            inputElement.style.width = `${inputWidth}px`;
-        }
+#input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
 
-        function removeCommas() {
-            const inputElement = document.getElementById('input-box');
-            const inputValue = inputElement.value;
-            const resultValue = inputValue.replace(/,/g, ''); // Remove commas
-            const resultElement = document.getElementById('result-box');
-            resultElement.innerText = resultValue;
-            if (!window.requestAnimationFrame) {
-                window.requestAnimationFrame = (callback) => setTimeout(callback, 1000 / 60);
-            }
-            window.requestAnimationFrame(updateHue);
-        }
-    </script>
+input[type="text"] {
+    appearance: none;
+    border: 2px solid #4CAF50;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 3px #4CAF50;
+}
+
+button {
+    appearance: none;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #3E8E41;
+}
+
+.result-box-container {
+    display: flex;
+    align-items: center;
+}
+
+#result-box {
+    background-color: #4CAF50;
+    border-radius: 4px;
+    color: black;
+    font-size: 16px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    flex: 1;
+}
+
+.copy-button {
+    margin-left: 10px;
+}
+</style>
 </head>
 <body>
-    <div id="input-container">
-        <input type="text" id="input-box" value="123,456,789,012" oninput="adjustInputWidth(this)">
-        <button onclick="removeCommas()">Remove Commas</button>
+<div id="input-container">
+    <input type="text" id="input-box" value="123,456,789,012" data-preview="123456789012" oninput="adjustInputWidth(this)">
+    <button id="remove-commas-button" onclick="removeCommas()">Remove Commas</button>
+    <div class="result-box-container">
         <p id="result-box"></p>
+        <button class="copy-button" id="copy-button">Copy</button>
     </div>
+</div>
+<script>
+let hue = 0;
+
+function updateHue() {
+    hue = (hue + 1) % 360;
+    document.getElementById('result-box').style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+    window.requestAnimationFrame(updateHue);
+}
+
+function adjustInputWidth(inputElement) {
+    const inputValue = inputElement.value.replace(/,/g, '');
+    const inputWidth = Math.max(inputValue.length * 9.5 + 40, 200);
+    inputElement.style.width = `${inputWidth}px`;
+}
+
+function removeCommas() {
+    const inputElement = document.getElementById('input-box');
+    const inputValue = inputElement.value;
+    const resultValue = inputValue.replace(/,/g, ''); // Remove commas
+    const resultElement = document.getElementById('result-box');
+    resultElement.textContent = resultValue;
+    const copyButton = document.getElementById('copy-button');
+    copyButton.style.display = 'inline-block'; // Show the copy button
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const copyButton = document.querySelector('.copy-button');
+    const resultBox = document.getElementById('result-box');
+
+    copyButton.addEventListener('click', function() {
+        const textToCopy = resultBox.textContent;
+        const tempInput = document.createElement('textarea');
+        tempInput.value = textToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        copyButton.innerText = 'Copied!';
+        setTimeout(function() {
+            copyButton.innerText = 'Copy';
+        }, 2000);
+    });
+
+    const removeCommasButton = document.getElementById('remove-commas-button');
+    removeCommasButton.addEventListener('click', removeCommas);
+
+    const inputBox = document.getElementById('input-box');
+    inputBox.addEventListener('input', function() {
+        inputBox.dataset.preview = inputBox.value.replace(/,/g, '');
+    });
+
+    window.requestAnimationFrame(updateHue);
+});
+</script>
 </body>
 </html>
